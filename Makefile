@@ -1,4 +1,6 @@
-obj-$(CONFIG_NET_XETH) += xeth.o
+ifneq ($(KERNELRELEASE),)
+
+obj-m += xeth.o
 
 xeth-y := xeth_mod.o
 xeth-y += xeth_mux.o
@@ -12,3 +14,11 @@ xeth-y += xeth_nb.o
 xeth-y += xeth_sbrx.o
 xeth-y += xeth_sbtx.o
 xeth-y += xeth_qsfp.o
+
+else
+KDIR ?= /lib/modules/`uname -r`/build
+
+default:
+	$(MAKE) -C $(KDIR) M=$$PWD
+
+endif
